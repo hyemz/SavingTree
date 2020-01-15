@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios';
 import {
   View,
   Button,
@@ -8,19 +9,28 @@ import {
 
 export default class SignUp extends React.Component {
   state = {
-    username: '', password: '', email: ''
+    usernametext: '', passwordtext: '', emailtext: ''
   }
-  onChangeText = (key, val) => {
-    this.setState({ [key]: val })
-  }
-  signUp = async () => {
-    const { username, password, email } = this.state
-    try {
-      // here place your signup logic
-      console.log('user successfully signed up!: ', success)
-    } catch (err) {
-      console.log('error signing up: ', err)
-    }
+  testPost(e) {
+    //e.preventDefault();
+    const {navigation} =this.props;
+    var url = 'http://192.168.40.14:3000/user';
+    axios
+      .post(url, {
+        name: this.state.usernametext,
+        password: this.state.passwordtext,
+        email: this.state.emailtext,
+      })
+      .then(function(response) {
+        console.log(response);
+        navigation.navigate("Login");
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+    this.state.usernametext = '';
+    this.state.emailtext = '';
+    this.state.passwordtext = '';
   }
   
   render() {
@@ -28,10 +38,10 @@ export default class SignUp extends React.Component {
       <View style={styles.container}>
         <TextInput
           style={styles.input}
-          placeholder='Username'
+          placeholder='Name'
           autoCapitalize="none"
           placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('username', val)}
+          onChangeText={usernametext => this.setState({usernametext})}
         />
         <TextInput
           style={styles.input}
@@ -39,18 +49,18 @@ export default class SignUp extends React.Component {
           secureTextEntry={true}
           autoCapitalize="none"
           placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('password', val)}
+          onChangeText={passwordtext => this.setState({passwordtext})}
         />
         <TextInput
           style={styles.input}
           placeholder='Email'
           autoCapitalize="none"
           placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('email', val)}
+          onChangeText={emailtext => this.setState({emailtext})}
         />
         <Button
           title='Sign Up' color="#82B78C"
-          onPress={this.signUp}
+          onPress={this.testPost.bind(this)}
         />
       </View>
     )

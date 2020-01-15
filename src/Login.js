@@ -6,7 +6,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 
 export default class Login extends React.Component {
   testPost(e) {
-    //e.preventDefault();
+    const {navigation} =this.props;
     var url = 'http://192.168.40.14:3000/login';
     axios
       .post(url, {
@@ -14,52 +14,27 @@ export default class Login extends React.Component {
         password: this.state.passwordtext,
       })
       .then(function(response) {
-        console.log(response);
+        console.log("로그인 리스폰스!!"+response);
+        if((response.request.response)!=0){
+          navigation.navigate("Home");
+        }
       })
       .catch(function(error) {
         console.log(error);
       });
+    
     this.state.emailtext = '';
     this.state.passwordtext = '';
-    //전역변수로 토큰 저장
-    //home 으로 네이게이터
-    ()=>navigation.navigate("Home");
-  }
-  // testGet(e) {
-  //   //e.preventDefault();
-  //   var url = 'http://localhost:3000/login';
-  //   axios
-  //   .get(url, {
-  //     email: this.state.emailtext,
-  //     password: this.state.passwordtext,
-  //   })
-  //   .then(ambilData => {
-  //     console.log(ambilData.data + "``````````````````````");
-  //     this.setState({
-  //       data : {
-  //         password : password,
-  //         email : email,
-  //     },
-  //     success:function(data){
-  //       if(data == 0){
-  //           alert("비밀번호가 다릅니다.");
-  //         }
-  //       else {
-  //           sessionStorage.setItem('jwtToken', data);
-  //           navigation.navigate("Home");
-  //         }
-  //       },
-  //     });
-  //   });
     
-  // } 
+  }
+  
 
   state={
     emailtext:"",
     passwordtext:""
   }
   render(){
-    const {navigation} =this.props;
+    
     return (
         <View style={styles.container}>
         <Image  source={require('../image/treee.png')}></Image>

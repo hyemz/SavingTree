@@ -19,20 +19,20 @@ const app = express();
 app.use(bodyParser.json())
 
 // Creating a GET route that returns data from the 'users' table.
-app.get('/user', function (req, res) {
-    // Connecting to the database. 
-    connection.getConnection(function (err, connection) {
+// app.get('/user', function (req, res) {
+//     // Connecting to the database. 
+//     connection.getConnection(function (err, connection) {
 
-    // Executing the MySQL query (select all data from the 'users' table).
-    connection.query('SELECT * FROM user', function (error, results, fields) {
-      // If some error occurs, we throw an error.
-      if (error) throw error;
+//     // Executing the MySQL query (select all data from the 'users' table).
+//     connection.query('SELECT * FROM user', function (error, results, fields) {
+//       // If some error occurs, we throw an error.
+//       if (error) throw error;
 
-      // Getting the 'response' from the database and sending it to our route. This is were the data is.
-      res.send(results)
-    });
-  });
-});
+//       // Getting the 'response' from the database and sending it to our route. This is were the data is.
+//       res.send(results)
+//     });
+//   });
+// });
 
 app.post('/login', function(req, res){
   console.log(req.body);
@@ -40,7 +40,12 @@ app.post('/login', function(req, res){
   var userPassword = req.body.password;
   var sql = "SELECT * FROM user WHERE email = ?";
   connection.query(sql, [email], function(error, results, fields){
-      if(error) throw error;
+      if(error) {
+        console.log('error 났다..')
+      }
+      if(!results[0]) {
+        return res.json(0);
+      }
       console.log(results);
       console.log(results[0].password, userPassword) ;
           if(results[0].password == userPassword){
@@ -69,6 +74,25 @@ app.post('/login', function(req, res){
   })
 
 });
+
+app.post('/user', function(req, res){
+  console.log(req.body);
+  var name = req.body.name;
+  var email = req.body.email;
+  var password = req.body.password;
+  var accessToken = req.body.accessToken;
+  var refreshToken = req.body.refreshToken;
+  var userSeqNo = req.body.userSeqNo;
+
+  var sql = "INSERT INTO savingTree.user (name, email, password, accessToken, refreshToken, userSeqNo) VALUES (?, ?, ?, ?, ?, ?)"
+
+  connection.query(sql, [name, email, password, accessToken, refreshToken, userSeqNo], function (error, results, fields) {
+      if (error) throw error;
+      console.log('The result is: ', results);
+      console.log('sql is', this.sql);
+      res.json(1);
+  });
+})
   
 
 // Starting our server.
