@@ -1,13 +1,17 @@
 import React from 'react';
 import axios from 'axios';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Button} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Button, AsyncStorage} from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
+
 
 export default class Login extends React.Component {
   testPost(e) {
     const {navigation} =this.props;
-    var url = 'http://192.168.40.14:3000/login';
+    //우리집
+    // var url = 'http://192.168.200.188:3010/login';
+    //it벤처타워
+    var url = 'http://192.168.40.14:3010/login';
     axios
       .post(url, {
         email: this.state.emailtext,
@@ -15,7 +19,10 @@ export default class Login extends React.Component {
       })
       .then(function(response) {
         console.log("로그인 리스폰스!!"+response);
+        AsyncStorage.setItem('jwtToken', response.request.response);
+        
         if((response.request.response)!=0){
+          console.log("토큰값 : "+ response.request.response);
           navigation.navigate("Home");
         }
       })
@@ -37,7 +44,7 @@ export default class Login extends React.Component {
     
     return (
         <View style={styles.container}>
-        <Image  source={require('../image/treee.png')}></Image>
+        <Image  source={require('../img/tree_02.png')}></Image>
         <Text style={styles.logo}>saving tree</Text>
         <View style={styles.inputView} >
             <TextInput  

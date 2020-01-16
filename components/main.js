@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {AppRegistry, View, StyleSheet, Text, TouchableOpacity, Image,Dimensions,Alert,Button } from 'react-native';
+import {AppRegistry, View, StyleSheet, Text, TouchableOpacity, Image,Dimensions,Alert,Button, Linking } from 'react-native';
 import Swiper from "react-native-swiper";
 import SlidingView from 'rn-sliding-view';
 import ProgressBarAnimated from "react-native-progress-bar-animated";
@@ -23,19 +23,19 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff"
       },
     slide1: {
-        // flex: 10,
+        // flex: 1,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#fff"
       },
       slide2: {
-        flex: 1,
+        // flex: 1,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#FFF"
       },
       slide3: {
-        flex: 1,
+        // flex: 1,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#Fff"
@@ -112,6 +112,10 @@ class main extends Component {
     });
   };
   
+  url1 = () => {
+    Linking.openURL('http://localhost:3000/login');
+  }
+
   render() {
     const {navigation} =this.props;
     const barWidth = Dimensions.get("screen").width - 30;
@@ -132,8 +136,6 @@ class main extends Component {
             </Image>
         </TouchableOpacity>
         <Swiper style={styles.wrapper} showsButtons={true}>
-        {/* <View style={styles.page}> */}
-        <View style ={styles.page}>
 
         <View style={styles.slide1}>
         
@@ -177,7 +179,6 @@ class main extends Component {
           </View>
         </View>
 
-        </View>
 
         <View style={styles.slide2}>
           <Button
@@ -285,7 +286,13 @@ class main extends Component {
                     <Text style={styles.slidingText}>숲 생성</Text>
                 </TouchableOpacity>
         
-                <Text style={styles.slidingText}>AAAAA</Text>
+                <TouchableOpacity
+                    onPress={this.url1}
+                    style={{ width: '100%' }}
+                >
+                    <Text style={styles.slidingText}>내 계좌</Text>
+                </TouchableOpacity>
+
                 <Text style={styles.slidingText}>BBBBB</Text>
                 <Text style={styles.slidingText}>CCCCC</Text>
                 <Text style={styles.slidingText}>DDDDD</Text>
@@ -302,4 +309,3 @@ class main extends Component {
 AppRegistry.registerComponent("myproject", () => SwiperComponent);
 
 export default main;
-
