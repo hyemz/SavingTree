@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
-import {AppRegistry, View, StyleSheet, Text, TouchableOpacity, Image,Dimensions,Alert,Button, Linking } from 'react-native';
+import {AppRegistry, View, StyleSheet, Text, TouchableOpacity, Image,Dimensions,Alert,Button} from 'react-native';
 import Swiper from "react-native-swiper";
 import SlidingView from 'rn-sliding-view';
 import ProgressBarAnimated from "react-native-progress-bar-animated";
 import ViewPager from "@react-native-community/viewpager";
+import Dialog, {
+  DialogTitle,
+  DialogContent,
+  DialogFooter,
+  DialogButton,
+  SlideAnimation,
+  ScaleAnimation,
+} from 'react-native-popup-dialog';
 
 const styles = StyleSheet.create({
     wrapper: {
@@ -23,19 +31,19 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff"
       },
     slide1: {
-        // flex: 1,
+        // flex: 10,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#fff"
       },
       slide2: {
-        // flex: 1,
+        flex: 1,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#FFF"
       },
       slide3: {
-        // flex: 1,
+        flex: 1,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#Fff"
@@ -62,7 +70,8 @@ const styles = StyleSheet.create({
       separator_1: {
         marginVertical: 10,
         borderWidth: 0.5,
-        borderColor: "#DCDCDC"
+        borderColor: "#DCDCDC",
+        justifyContent: 'center',
       },
       label: {
         color: "#999",
@@ -94,16 +103,30 @@ const styles = StyleSheet.create({
     color: '#82B78C',
     backgroundColor: 'white',
   },
+  SeparatorLine: {
+    backgroundColor: '#fff',
+    width: 1,
+    height: 40,
+  },
 
 });
 
+// Linking.canOpenURL(url)
+//   .then((supported) => {
+//     if (!supported) {
+//       console.log("Can't handle url: " + url);
+//     } else {
+//       return Linking.openURL('http://192.168.40.4:3000/login');
+//     }
+//   })
 
 class main extends Component {
   state = {
     sliderVisible: false,
     progress: 0,
     progressWithOnComplete: 0,
-    progressCustomized: 0
+    progressCustomized: 0,
+    QrDialog: false,
   };
 
   increase = (key, value) => {
@@ -112,10 +135,6 @@ class main extends Component {
     });
   };
   
-  url1 = () => {
-    Linking.openURL('http://localhost:3000/login');
-  }
-
   render() {
     const {navigation} =this.props;
     const barWidth = Dimensions.get("screen").width - 30;
@@ -136,8 +155,11 @@ class main extends Component {
             </Image>
         </TouchableOpacity>
         <Swiper style={styles.wrapper} showsButtons={true}>
+        {/* <View style={styles.page}> */}
+        <View style ={styles.page}>
 
         <View style={styles.slide1}>
+        
         
           <Button
             title="기부하기"
@@ -179,13 +201,88 @@ class main extends Component {
           </View>
         </View>
 
+        </View>
 
         <View style={styles.slide2}>
-          <Button
+        
+          {/* <Button
             title="기부하기"
             //버튼 누르면 QR코드 생성 화면
             onPress={this.increase.bind(this, "progressWithOnComplete", 20)}
           />
+ */}
+          <Button
+            title="기부하기"
+            onPress={() => {
+              this.setState({
+                QrDialog: true,
+              });
+            }}
+          />
+           {/* //버튼 누르면 QR코드 생성 화면 */}
+          <TouchableOpacity
+                onPress={() => {
+                  this.setState({
+                    QrDialog: true,
+                  });
+                }}
+                style={{ width: '100%', height: '100%' }}
+                
+            >
+              <Image 
+                style = {{height: '100%', width: '100%', resizeMode:'contain'}}
+                source = {require('../img/give.png')}> 
+            </Image>
+            </TouchableOpacity>
+
+          <Dialog
+          onDismiss={() => {
+            this.setState({ QrDialog: false });
+          }}
+          width={0.9}
+          visible={this.state.QrDialog}
+          rounded
+          actionsBordered
+          dialogTitle={
+            <DialogTitle
+              title="Qr 코드 결제 창"
+              style={{
+                backgroundColor: '#F7F7F8',
+              }}
+              hasTitleBar={false}
+              align="left"
+            />
+          }
+          footer={
+            <DialogFooter>
+              <DialogButton
+                text="CANCEL"
+                bordered
+                onPress={() => {
+                  this.setState({ QrDialog: false });
+                }}
+                
+                key="button-1"
+              />
+              <DialogButton
+                text="OK"
+                bordered
+                onPress={() => {
+                  this.setState({ QrDialog: false });
+                }}
+                key="button-2"
+              />
+            </DialogFooter>
+          }>
+          <DialogContent
+            style={{
+              backgroundColor: '#F7F7F8',
+            }}>
+              <View style={styles.separator_1} />
+            <Image source={require("../img/qr.png")} />
+          </DialogContent>
+        </Dialog>
+
           <View style={styles.separator_1} />
           <Image source={require("../img/tree_02.png")} />
           <View style={styles.separator_1} />
@@ -285,14 +382,23 @@ class main extends Component {
                 >
                     <Text style={styles.slidingText}>숲 생성</Text>
                 </TouchableOpacity>
-        
+
                 <TouchableOpacity
-                    onPress={this.url1}
+                    onPress={()=> navigation.navigate("mybank")}
                     style={{ width: '100%' }}
                 >
                     <Text style={styles.slidingText}>내 계좌</Text>
                 </TouchableOpacity>
 
+                {/* <TouchableOpacity
+                    onPress={()=>URL1}
+                    style={{ width: '100%' }}
+                >
+                    <Text style={styles.slidingText}>Test</Text>
+                </TouchableOpacity> */}
+
+        
+                <Text style={styles.slidingText}>AAAAA</Text>
                 <Text style={styles.slidingText}>BBBBB</Text>
                 <Text style={styles.slidingText}>CCCCC</Text>
                 <Text style={styles.slidingText}>DDDDD</Text>
@@ -309,3 +415,4 @@ class main extends Component {
 AppRegistry.registerComponent("myproject", () => SwiperComponent);
 
 export default main;
+
