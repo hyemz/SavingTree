@@ -15,7 +15,7 @@ export default class SignUp extends React.Component {
     //e.preventDefault();
     const {navigation} =this.props;
     //우리집
-    // var url = 'http://192.168.200.188:3010/login';
+    //var url = 'http://172.30.1.19:3010/login';
     //it벤처타워
     var url = 'http://192.168.40.14:3010/login';
     axios

@@ -3,9 +3,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import mainpage from './components/main';
-import accountpage from './components/account';
 import forestpage from './components/forest';
-
+import profile from './components/Profile';
 import Login from './src/Login';
 import SignUp from './src/SignUp';
 
@@ -24,9 +23,8 @@ const AppNavigator = createStackNavigator({
   Login: {screen: Login},
   SignUp: {screen: SignUp},
   Home: {screen:mainpage},
-  account: {screen:accountpage},
-  forest: {screen:forestpage}
-
+  forest: {screen:forestpage},
+  profile: {screen: profile}
 });
 
 const AppContainer = createAppContainer(AppNavigator);
