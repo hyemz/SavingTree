@@ -1,13 +1,22 @@
 import React from 'react';
 import axios from 'axios';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Button} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Button, AsyncStorage} from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
+
 
 export default class Login extends React.Component {
   testPost(e) {
     const {navigation} =this.props;
-    var url = 'http://192.168.40.14:3000/login';
+    //우리집
+    //var url = 'http://172.30.1.19:3010/login';
+    //it벤처타워
+    var url = 'http://192.168.40.14:3010/login';
+    var v1 = '';
+    var v2 = '';
+        v1 = this.state.emailtext;
+        v2 = this.state.passwordtext;
+
     axios
       .post(url, {
         email: this.state.emailtext,
@@ -15,8 +24,17 @@ export default class Login extends React.Component {
       })
       .then(function(response) {
         console.log("로그인 리스폰스!!"+response);
+        AsyncStorage.setItem('jwtToken', response.request.response);
+
+        window.jwtoken = response.request.response.split('"')[1];
+        console.log('token is : ',jwtoken);
         if((response.request.response)!=0){
-          navigation.navigate("Home");
+          
+          console.log("토큰값 : "+ response.request.response);
+          //v1 = this.state.email;
+          //navigation.navigate("Home", {'userEmail': v1});
+          //console.log(v1);
+          navigation.navigate("Home", {"userEmail": v1, "userPassword": v2});
         }
       })
       .catch(function(error) {
@@ -37,7 +55,7 @@ export default class Login extends React.Component {
     
     return (
         <View style={styles.container}>
-        <Image  source={require('../image/treee.png')}></Image>
+        <Image  source={require('../img/tree_02.png')}></Image>
         <Text style={styles.logo}>saving tree</Text>
         <View style={styles.inputView} >
             <TextInput  
